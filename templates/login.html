@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Bin Management – Login</title>
     <style>
-        /* Modern Color Palette & Variables */
         :root {
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #020617;
+            --card-bg: rgba(15, 23, 42, 0.86);
+            --card-border: rgba(148, 163, 184, 0.55);
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
+            --error-bg: #fee2e2;
+            --error-text: #b91c1c;
+            --success: #22c55e;
         }
 
-        /* Reset & Base Styles */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -24,119 +26,689 @@
         }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            background:
+                radial-gradient(circle at top, rgba(37, 99, 235, 0.28), transparent 55%),
+                radial-gradient(circle at bottom, rgba(15, 23, 42, 0.9), #020617 70%);
+            color: var(--text-main);
             line-height: 1.5;
+            padding: 2rem 4rem;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Login Card */
-        .login-box {
-            background: var(--card-bg);
-            padding: 2.5rem 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            border: 1px solid var(--border);
-            width: 100%;
-            max-width: 400px;
-            margin: 1rem;
+        /* animated background glow */
+        body::before {
+            content: "";
+            position: absolute;
+            inset: -40%;
+            background:
+                radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.10), transparent 55%),
+                radial-gradient(circle at 100% 100%, rgba(37, 99, 235, 0.20), transparent 60%);
+            mix-blend-mode: screen;
+            opacity: 0.5;
+            pointer-events: none;
+            filter: blur(2px);
+        }
+
+        @keyframes bg-orbit {
+            0% {
+                transform: translate3d(-20px, 10px, 0) scale(1);
+            }
+            50% {
+                transform: translate3d(40px, -20px, 0) scale(1.05);
+            }
+            100% {
+                transform: translate3d(-10px, 30px, 0) scale(1.02);
+            }
+        }
+
+ .shell {
+    width: 100%;
+    max-width: 1400px; /* increased */
+    display: grid;
+    grid-template-columns: 1.4fr 520px; /* more left dominance */
+    gap: 6rem; /* more breathing space */
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+       .shell-left {
+    max-width: 600px;
+    color: #f1f5f9;
+}
+
+        .shell-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #93c5fd;
+            font-weight: 600;
+            margin-bottom: 0.9rem;
+        }
+
+        .shell-title-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.25);
+        }
+ .shell-headline {
+    font-size: 2.4rem; /* bigger = more premium */
+    line-height: 1.3;
+    color: #ffffff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+    .shell-copy {
+    max-width: 420px;
+    font-size: 1rem;
+    color: #cbd5f5;
+}
+        /* small stats chips */
+        .shell-metrics {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+        }
+
+        .metric-pill {
+            font-size: 0.78rem;
+            padding: 0.35rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            color: #d1d5db;
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.98));
+            backdrop-filter: blur(10px);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            white-space: nowrap;
+        }
+
+        .metric-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #60a5fa;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                align-items: center;
+                padding: 1.5rem 1rem;
+            }
+
+            .shell {
+                grid-template-columns: 1fr;
+                max-width: 520px;
+                gap: 2rem;
+            }
+
+            .shell-left {
+                display: none;
+            }
+
+            .login-box {
+                max-width: 100%;
+            }
+        }
+.login-box-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* soft glow on the ground under the card */
+.login-box-wrapper::before {
+    content: "";
+    position: absolute;
+    inset: auto 8% -34px 8%;
+    height: 40px;
+    border-radius: 999px;
+    background: radial-gradient(circle at center, rgba(15, 23, 42, 0.28), transparent 70%);
+    opacity: 0.85;
+    filter: blur(4px);
+    pointer-events: none;
+}
+
+/* main white card */
+.login-box {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    padding: 2.3rem 2.1rem 2rem;
+    border-radius: 22px;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    background:
+        radial-gradient(circle at top left, rgba(248, 250, 252, 0.98), rgba(241, 245, 249, 0.98));
+    box-shadow:
+        0 26px 70px rgba(15, 23, 42, 0.55),
+        0 0 0 1px rgba(148, 163, 184, 0.16);
+    backdrop-filter: blur(18px) saturate(135%);
+    -webkit-backdrop-filter: blur(18px) saturate(135%);
+    overflow: hidden;
+    transform: translateY(0);
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease,
+        background 0.18s ease;
+}
+
+/* inner ring and subtle border */
+.login-box::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid rgba(59, 130, 246, 0.14);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.7),
+        0 0 0 1px rgba(15, 23, 42, 0.02);
+    pointer-events: none;
+}
+
+/* diagonal sheen & subtle tint */
+.login-box::after {
+    content: "";
+    position: absolute;
+    inset: -40%;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.85),
+            rgba(255, 255, 255, 0.25) 25%,
+            transparent 60%
+        ),
+        radial-gradient(circle at 120% 0%, rgba(37, 99, 235, 0.12), transparent 55%);
+    mix-blend-mode: soft-light;
+    opacity: 0.85;
+    pointer-events: none;
+    transform: translate3d(-10px, -20px, 0);
+}
+
+/* lift on hover for desktop */
+@media (hover: hover) and (pointer: fine) {
+    .login-box:hover {
+        transform: translateY(-4px);
+        box-shadow:
+            0 32px 80px rgba(15, 23, 42, 0.65),
+            0 0 0 1px rgba(148, 163, 184, 0.2);
+        border-color: rgba(191, 219, 254, 0.95);
+        background:
+            radial-gradient(circle at top left, rgba(248, 250, 252, 1), rgba(241, 245, 249, 1));
+    }
+}
+
+/* mobile tweaks */
+@media (max-width: 480px) {
+    .login-box {
+        padding: 1.7rem 1.4rem 1.6rem;
+        border-radius: 18px;
+    }
+}
+
+        .login-header {
+            margin-bottom: 1.65rem;
+            text-align: left;
+            position: relative;
+            z-index: 1;
+        }
+
+        .product-name {
+            font-size: 0.78rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 0.4rem;
         }
 
         .login-box h2 {
-            text-align: center;
-            font-size: 1.75rem;
-            font-weight: 700;
+            font-size: 1.6rem;
+            font-weight: 650;
             color: var(--text-main);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.02em;
         }
 
-        .login-box p.subtitle {
-            text-align: center;
+        .subtitle {
             color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 2rem;
+            font-size: 0.9rem;
         }
 
-        /* Form Elements */
+        .alert-error {
+            background: var(--error-bg);
+            color: var(--error-text);
+            padding: 0.65rem 0.75rem;
+            border-radius: 0.6rem;
+            font-size: 0.85rem;
+            text-align: left;
+            margin-bottom: 1rem;
+            border: 1px solid #fecaca;
+            position: relative;
+            z-index: 1;
+        }
+
+        .alert-error::before {
+            content: "!";
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            margin-right: 0.45rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+        }
+
         .form-group {
-            margin-bottom: 1.25rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.83rem;
+            font-weight: 500;
+            color: var(--text-main);
+            margin-bottom: 0.35rem;
+        }
+
+        .label-hint {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            font-weight: 400;
         }
 
         input {
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 0.78rem 0.9rem;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 0.7rem;
             font-size: 0.95rem;
             outline: none;
-            transition: all 0.2s;
+            transition:
+                border-color 0.16s ease,
+                box-shadow 0.16s ease,
+                background-color 0.16s ease,
+                transform 0.08s ease;
             color: var(--text-main);
-            background: #fff;
+            background: #f9fafb;
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+        }
+
+        input:hover {
+            background-color: #f3f4f6;
         }
 
         input:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background-color: #ffffff;
+            box-shadow:
+                0 0 0 1px rgba(37, 99, 235, 0.35),
+                0 0 0 6px rgba(191, 219, 254, 0.6);
+            transform: translateY(-0.5px);
         }
 
-        /* Button */
         button {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.85rem;
+            border-radius: 999px;
             border: none;
-            border-radius: 8px;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.98rem;
             cursor: pointer;
-            transition: all 0.2s;
-            background: var(--primary);
-            color: white;
-            margin-top: 0.5rem;
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--primary), #1d4ed8);
+            box-shadow: 0 12px 28px rgba(37, 99, 235, 0.4);
+            transition:
+                transform 0.12s ease,
+                box-shadow 0.12s ease,
+                background 0.12s ease,
+                filter 0.12s ease;
+            margin-top: 0.55rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        button::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(circle at top, rgba(255, 255, 255, 0.35), transparent 40%);
+            opacity: 0.65;
+            mix-blend-mode: soft-light;
+            pointer-events: none;
         }
 
         button:hover {
-            background: var(--primary-hover);
+            background: linear-gradient(135deg, var(--primary-hover), #1d4ed8);
+            transform: translateY(-1.5px);
+            box-shadow: 0 16px 36px rgba(37, 99, 235, 0.55);
+            filter: saturate(1.05);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 8px 18px rgba(37, 99, 235, 0.38);
+        }
+
+        .login-footer {
+            margin-top: 1.25rem;
+            text-align: left;
+            font-size: 0.8rem;
+            color: #9ca3af;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-footer strong {
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .login-footer span {
+            display: inline-block;
+            padding: 0.1rem 0.3rem;
+            border-radius: 0.4rem;
+            background: #f3f4f6;
+            margin-right: 0.15rem;
+        }
+
+        /* ==== Enhanced inspiration styles ==== */
+        .login-box {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+
+        .login-box::before,
+        .login-box::after {
+            display: none;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .login-box:hover {
+                background: #ffffff;
+                border-color: #e5e7eb;
+                box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+            }
+        }
+
+        .login-box h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 1.2rem;
+        }
+
+        input {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 0.85rem 0.9rem;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+            transform: none;
+        }
+
+        .form-extra {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            margin: 0.6rem 0 1rem;
+            color: #6b7280;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-extra label {
+            display: inline-flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 0;
+            color: #6b7280;
+            font-size: inherit;
+            font-weight: 400;
+        }
+
+        .form-extra input {
+            width: auto;
+            margin-right: 6px;
+        }
+
+        .form-extra a {
+            color: #6b7280;
+            text-decoration: none;
+        }
+
+        .form-extra a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            background: #111111;
+            border-radius: 999px;
+            padding: 0.9rem;
+            font-weight: 600;
+            box-shadow: none;
+        }
+
+        button::after {
+            display: none;
+        }
+
+        button:hover {
+            background: #000000;
             transform: translateY(-1px);
+            box-shadow: none;
+            filter: none;
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1.2rem 0;
+            font-size: 0.8rem;
+            color: #9ca3af;
+            position: relative;
+            z-index: 1;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        .divider span {
+            margin: 0 10px;
+        }
+
+        .google-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 999px;
+            padding: 0.75rem;
+            font-size: 0.9rem;
+            background: #ffffff;
+            cursor: pointer;
+            transition: 0.2s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .google-btn:hover {
+            background: #f9fafb;
+        }
+
+        .signup {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #6b7280;
+            position: relative;
+            z-index: 1;
+        }
+
+        .signup a {
+            color: #111111;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .signup a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .login-box {
+                padding: 1.7rem 1.4rem 1.6rem;
+                border-radius: 18px;
+            }
         }
     </style>
 </head>
-
 <body>
+    <div class="shell">
+        <div class="shell-left">
+            <div class="shell-title">
+                <span class="shell-title-dot"></span>
+                Bin Management
+            </div>
+            <h1 class="shell-headline">Monitor fill levels & routes in real time.</h1>
+            <p class="shell-copy">
+                Log in as admin, driver, or user to manage city bins, assignments, and collections
+                from a single dashboard.
+            </p>
 
-    <div class="login-box">
-        <h2>Welcome Back</h2>
-        <p class="subtitle">Please enter your details to sign in.</p>
-
-        {% if error %}
-        <div style="
-            background:#fee2e2;
-            color:#dc2626;
-            padding:10px;
-            border-radius:8px;
-            margin-bottom:15px;
-            font-size:14px;
-            text-align:center;
-        ">
-            {{ error }}
+            <div class="shell-metrics">
+                <div class="metric-pill">
+                    <span class="metric-dot"></span>
+                    Live bin telemetry
+                </div>
+                <div class="metric-pill">
+                    <span class="metric-dot"></span>
+                    Route optimization
+                </div>
+                <div class="metric-pill">
+                    <span class="metric-dot"></span>
+                    Role-based access
+                </div>
+            </div>
         </div>
-        {% endif %}
-        
-        <form method="POST">
-            <div class="form-group">
-                <input name="username" placeholder="Username" required autocomplete="username">
-            </div>
-            
-            <div class="form-group">
-                <input name="password" type="password" placeholder="Password" required autocomplete="current-password">
-            </div>
-            
-            <button type="submit">Login</button>
-        </form>
+
+        <div class="login-box-wrapper">
+            <div class="login-box">
+                <div class="login-header">
+                    <div class="product-name">Sign in</div>
+                    <h2>Welcome back</h2>
+                    <p class="subtitle">Use your demo credentials to access the dashboard.</p>
+                </div>
+
+                {% if error %}
+                <div class="alert-error">
+                    {{ error }}
+                </div>
+                {% endif %}
+
+                <form method="POST">
+    <div class="form-group">
+        <label for="username">
+            <span>Username</span>
+            <span class="label-hint">admin, driver1, user</span>
+        </label>
+        <input id="username"
+               name="username"
+               placeholder="e.g. admin, driver1, user"
+               required
+               autocomplete="username">
     </div>
 
+    <div class="form-group">
+        <label for="password">
+            <span>Password</span>
+            <span class="label-hint">Use demo password</span>
+        </label>
+        <input id="password"
+               name="password"
+               type="password"
+               placeholder="Your password"
+               required
+               autocomplete="current-password">
+    </div>
+
+    <div class="form-extra">
+        <label><input type="checkbox"> Remember me</label>
+        <a href="#">Forgot Password?</a>
+    </div>
+
+    <button type="submit">Continue</button>
+
+    <div class="divider"><span>Or continue with</span></div>
+
+    <div class="google-btn">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="18" alt="">
+        Continue with Google
+    </div>
+
+    <div class="signup">
+        Don't have an account? <a href="#">Sign up</a>
+    </div>
+</form>
+        
+
+                <div class="login-footer">
+                    Demo roles:
+                    <span><strong>admin / admin123</strong></span>
+                    <span><strong>driver1 / 123</strong></span>
+                    <span><strong>user / 123</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

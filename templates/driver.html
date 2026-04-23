@@ -3,24 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Driver Panel</title>
+    <title>Driver Panel | EcoSmart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Modern Color Palette & Variables */
         :root {
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --success: #10b981;
-            --success-hover: #059669;
-            --secondary: #f1f5f9;
-            --secondary-hover: #e2e8f0;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
+            /* Synchronized Palette */
+            --brand-primary: #2563eb;
+            --brand-primary-soft: #dbeafe;
+            --brand-success: #059669;
+            --brand-warning: #d97706;
+            --brand-danger: #dc2626;
+            
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-heading: #0f172a;
+            --text-body: #334155;
             --text-muted: #64748b;
-            --border: #e2e8f0;
+            --border-base: #e2e8f0;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Reset & Base Styles */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -28,66 +37,94 @@
         }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.5;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-body);
+            line-height: 1.6;
         }
 
-        /* Navigation Bar */
+        /* Navigation */
         .nav {
-            background-color: #0f172a;
-            color: white;
-            padding: 1rem 2rem;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-base);
+            padding: 0.75rem 2.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         
-        .nav h2 { 
-            font-size: 1.25rem; 
-            font-weight: 600; 
+        .nav-brand { 
+            font-size: 1.125rem; 
+            font-weight: 700; 
+            color: var(--brand-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .nav a {
-            color: #cbd5e1;
+        .logout-btn {
+            color: var(--brand-danger);
             text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s;
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            border: 1px solid transparent;
         }
 
-        .nav a:hover { 
-            color: white; 
+        .logout-btn:hover {
+            background: #fee2e2;
+            border-color: #fecaca;
         }
 
-        /* Main Container */
         .container {
             max-width: 1200px;
-            margin: 2rem auto;
+            margin: 2.5rem auto;
             padding: 0 1.5rem;
         }
 
-        /* Summary Stats Grid */
+        /* Header Section */
+        .driver-header {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .driver-id-badge {
+            background: var(--text-heading);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Stats Grid */
         .summary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
 
         .summary-card {
-            background: var(--card-bg);
+            background: var(--bg-card);
             padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-base);
+            box-shadow: var(--shadow-sm);
             text-align: center;
         }
 
         .summary-card h4 { 
             color: var(--text-muted); 
-            font-size: 0.875rem; 
+            font-size: 0.75rem; 
             text-transform: uppercase; 
             letter-spacing: 0.05em; 
             margin-bottom: 0.5rem; 
@@ -95,141 +132,146 @@
 
         .summary-card p { 
             font-size: 2rem; 
-            font-weight: 700; 
-            color: var(--primary); 
+            font-weight: 800; 
+            color: var(--brand-primary); 
         }
 
-        /* General Card Layout */
-        .card {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            border: 1px solid var(--border);
-        }
-
-        .section-header {
-            margin-bottom: 1rem;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        /* Controls Panel (Sort & Search) */
+        /* Controls Panel */
         .controls-panel {
+            background: var(--bg-card);
+            padding: 1.25rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-base);
             display: flex;
             flex-wrap: wrap;
-            gap: 1.5rem;
-            justify-content: space-between;
+            gap: 1rem;
             align-items: center;
             margin-bottom: 2.5rem;
-            background: var(--card-bg);
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .view-toggles {
             display: flex;
             gap: 0.5rem;
+            flex: 1;
         }
 
         .search-form {
             display: flex;
-            gap: 0.75rem;
-            flex: 1;
-            max-width: 400px;
+            gap: 0.5rem;
+            min-width: 300px;
         }
 
+        /* Inputs & Buttons */
         input {
             flex: 1;
-            padding: 0.625rem 0.75rem;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.95rem;
-            outline: none;
-            transition: all 0.2s;
+            padding: 0.625rem 1rem;
+            border: 1px solid var(--border-base);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            transition: var(--transition);
         }
 
         input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 4px var(--brand-primary-soft);
         }
 
-        /* Buttons & Links acting as Buttons */
-        .btn, button {
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 0.625rem 1.25rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
         }
 
-        .default { background: var(--secondary); color: var(--text-main); }
-        .default:hover { background: var(--secondary-hover); }
+        .btn-primary { background: var(--brand-primary); color: white; }
+        .btn-primary:hover { background: #1d4ed8; }
 
-        .primary { background: var(--primary); color: white; }
-        .primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
-        
-        .success { background: var(--success); color: white; width: 100%; margin-top: 1rem; }
-        .success:hover { background: var(--success-hover); transform: translateY(-1px); }
+        .btn-outline { background: white; border: 1px solid var(--border-base); color: var(--text-body); }
+        .btn-outline:hover { background: var(--bg-main); }
+
+        .btn-success { 
+            background: var(--brand-success); 
+            color: white; 
+            width: 100%; 
+            margin-top: 1rem;
+            padding: 0.875rem;
+        }
+        .btn-success:hover { background: #047857; transform: translateY(-2px); }
+
+        .active { background: var(--brand-primary-soft); color: var(--brand-primary); border-color: var(--brand-primary); }
 
         /* Tasks Grid */
         .tasks-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
             gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-base);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
         }
 
         .task-card {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            border-top: 4px solid var(--brand-primary);
+        }
+
+        .task-card.done {
+            border-top-color: var(--border-base);
+            opacity: 0.8;
         }
 
         .task-title { 
             font-size: 1.125rem; 
-            font-weight: 600; 
-            margin-bottom: 0.75rem;
-            color: var(--text-main);
-        }
-
-        .task-details {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
+            font-weight: 700; 
+            color: var(--text-heading);
             margin-bottom: 1rem;
         }
 
-        .badge {
-            background: #f1f5f9;
-            padding: 0.35rem 0.75rem;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: #475569;
-            border: 1px solid var(--border);
+        .badge-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
 
-        /* Responsive adjustments */
+        .badge {
+            background: var(--bg-main);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border: 1px solid var(--border-base);
+        }
+
+        .status-pill {
+            margin-left: auto;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .status-pending { background: #fff7ed; color: #9a3412; }
+        .status-done { background: #ecfdf5; color: #065f46; }
+
         @media (max-width: 768px) {
-            .controls-panel {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .search-form {
-                max-width: 100%;
-            }
-            .view-toggles {
-                flex-direction: column;
-            }
+            .controls-panel { flex-direction: column; align-items: stretch; }
+            .search-form { min-width: 100%; }
         }
     </style>
 </head>
@@ -237,72 +279,84 @@
 <body>
 
     <nav class="nav">
-        <h2>Driver Panel</h2>
-        <a href="/logout">Logout</a>
+        <div class="nav-brand">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 011 1v2a1 1 0 01-1 1h-1m-4-13h11l3 5v8a1 1 0 01-1 1h-1"></path></svg>
+            EcoSmart Driver
+        </div>
+        <a href="/logout" class="logout-btn">Log Out</a>
     </nav>
 
     <div class="container">
 
-        <div style="margin-bottom:16px;">
-            <h2 style="margin:0;">
-                Driver #{{ driver_id }}
-            </h2>
+        <div class="driver-header">
+            <h2 class="text-heading">Welcome Back!</h2>
+            <span class="driver-id-badge">Driver ID: #{{ driver_id }}</span>
         </div>
 
         <div class="summary-grid">
             <div class="summary-card">
-                <h4>Pending Tasks</h4>
+                <h4>To be Collected</h4>
                 <p>{{ pending }}</p>
             </div>
             <div class="summary-card">
-                <h4>Completed</h4>
-                <p>{{ done }}</p>
+                <h4>Tasks Finished</h4>
+                <p style="color: var(--brand-success)">{{ done }}</p>
             </div>
         </div>
 
         <div class="controls-panel">
             <div class="view-toggles">
                 <a href="/driver/{{ driver_id }}" 
-                class="btn {{ 'primary' if not request.args.get('sort') else 'default' }}">
-                Default View
+                   class="btn {{ 'active' if not request.args.get('sort') else 'btn-outline' }}">
+                   All Tasks
                 </a>
-
                 <a href="/driver/{{ driver_id }}?sort=status" 
-                class="btn {{ 'primary' if request.args.get('sort') == 'status' else 'default' }}">
-                Pending First
+                   class="btn {{ 'active' if request.args.get('sort') == 'status' else 'btn-outline' }}">
+                   Priority (Pending)
                 </a>
             </div>
 
             <form method="GET" action="/driver/{{ driver_id }}" class="search-form">
-                <input name="search" placeholder="Search bin location..." value="{{ request.args.get('search','') }}">
-                <button type="submit" class="btn primary">Search</button>
+                <input name="search" placeholder="Filter by location..." value="{{ request.args.get('search','') }}">
+                <button type="submit" class="btn btn-primary">Search</button>
             </form>
         </div>
 
-        <h3 class="section-header">Your Tasks</h3>
+        <h3 style="margin-bottom: 1.5rem; font-weight: 700;">Route Schedule</h3>
         
         <div class="tasks-grid">
             {% for t in tasks %}
-            <div class="card task-card">
-                <div>
+            <div class="card task-card {{ 'done' if t[4] == 'DONE' }}">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                     <div class="task-title">{{ t[1] }}</div>
-                    
-                    <div class="task-details">
-                        <span class="badge">Fill: <strong>{{ t[2] }}%</strong></span>
-                        <span class="badge">Bin: {{ t[3] }}</span>
-                        <span class="badge">Status: {{ t[4] }}</span>
-                    </div>
+                    <span class="status-pill {{ 'status-done' if t[4] == 'DONE' else 'status-pending' }}">
+                        {{ t[4] }}
+                    </span>
+                </div>
+                
+                <div class="badge-group">
+                    <span class="badge">Bin Ref: {{ t[3] }}</span>
+                    <span class="badge" style="color: var(--text-heading)">
+                        Current Fill: <strong>{{ t[2] }}%</strong>
+                    </span>
                 </div>
 
                 {% if t[4] != 'DONE' %}
-                <a href="/collect/{{ t[0] }}" class="btn success">Mark Done</a>
+                <a href="/collect/{{ t[0] }}" class="btn btn-success">
+                    <svg width="20" height="20" style="margin-right:8px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>
+                    Confirm Collection
+                </a>
+                {% else %}
+                <div style="margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: var(--brand-success); font-weight: 600;">
+                    ✓ Task Completed
+                </div>
                 {% endif %}
             </div>
             {% endfor %}
             
             {% if tasks|length == 0 %}
-            <div class="card" style="grid-column: 1 / -1; text-align: center; color: var(--text-muted);">
-                No tasks found.
+            <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                <p style="color: var(--text-muted);">No assigned tasks found for this search/filter.</p>
             </div>
             {% endif %}
         </div>
